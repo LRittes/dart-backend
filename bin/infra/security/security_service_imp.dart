@@ -1,4 +1,6 @@
 import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
+import 'package:shelf/shelf.dart';
+import 'package:shelf/src/middleware.dart';
 
 import '../../utils/custom_env.dart';
 import 'security_service.dart';
@@ -34,4 +36,27 @@ class SecurityServiceImp implements SecurityService<JWT> {
       return null;
     }
   }
+
+  @override
+  // TODO: implement autorization
+  Middleware get autorization {
+    return (Handler handler) {
+      return (Request req) async {
+        JWT? jwt;
+        String? autorizationHeadler = req.headers['Authorization'];
+        if (autorizationHeadler != null) {
+          if (autorizationHeadler.startsWith('Bearer ')) {
+            String token = autorizationHeadler.substring(7);
+            jwt = await validateJWT(token);
+          }
+        }
+        var request = req.change(context: {'jwt': jwt});
+        return handler(request);
+      };
+    };
+  }
+
+  @override
+  // TODO: implement verifyJWT
+  Middleware get verifyJWT => throw UnimplementedError();
 }
