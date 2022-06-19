@@ -4,13 +4,14 @@ import 'apis/blog_api.dart';
 import 'apis/login_api.dart';
 import 'infra/custom_server.dart';
 import 'infra/middleware_interception.dart';
+import 'infra/security/security_service_imp.dart';
 import 'service/noticia_service.dart';
 import 'utils/custom_env.dart';
 
 void main() async {
   var cascadeHandler = Cascade()
       .add(
-        LoginApi().handler,
+        LoginApi(SecurityServiceImp()).handler,
       )
       .add(
         BlogApi(NoticiaService()).handler,
