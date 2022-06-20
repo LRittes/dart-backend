@@ -7,8 +7,12 @@ class DependencyInjector {
 
   final _instanceMap = Map<Type, _InstanceGenerator<Object>>();
 
-  void register<T extends Object>(InstanceCreator<T> instance,
-          {bool isSingleton = false}) =>
+  call<T extends Object>() => get<T>();
+
+  void register<T extends Object>(
+    InstanceCreator<T> instance, {
+    bool isSingleton = true,
+  }) =>
       _instanceMap[T] = _InstanceGenerator(instance, isSingleton);
 
   // get
