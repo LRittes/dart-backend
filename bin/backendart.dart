@@ -12,23 +12,18 @@ import 'utils/custom_env.dart';
 
 void main() async {
   final _di = DependencyInjector();
-  SecurityService _securityService = _di.get<SecurityService>();
 
-  _di.register<SecurityService>(() => SecurityServiceImp(), isSingleton: true);
+  _di.register<SecurityService>(
+    () => SecurityServiceImp(),
+    isSingleton: true,
+  );
+  var _securityService = _di.get<SecurityService>();
 
   var cascadeHandler = Cascade()
-      .add(
-        LoginApi(_securityService).getHandler(),
-      )
-      .add(
-        BlogApi(NoticiaService()).getHandler(
-          middleware: [
-            _securityService.authorization,
-            _securityService.verifyJWT
-          ],
-        ),
-      )
+      .add(LoginApi(_securityService).getHandler())
+      .add(BlogApi(NoticiaService()).getHandler(isSecurity: true))
       .handler;
+
   var handler = Pipeline()
       .addMiddleware(logRequests())
       .addMiddleware(MiddlewareInterception().middleware)

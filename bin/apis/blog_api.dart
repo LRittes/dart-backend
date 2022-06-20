@@ -13,7 +13,10 @@ class BlogApi extends Api {
   BlogApi(this._service);
 
   @override
-  Handler getHandler({List<Middleware>? middleware}) {
+  Handler getHandler({
+    List<Middleware>? middleware,
+    bool isSecurity = false,
+  }) {
     Router router = Router();
 
     // listagem
@@ -44,6 +47,7 @@ class BlogApi extends Api {
       return Response.ok('deletou');
     });
 
-    return createHandler(router: router, middleware: middleware);
+    return createHandler(
+        router: router, isSecurity: isSecurity, middleware: middleware);
   }
 }

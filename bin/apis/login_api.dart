@@ -10,7 +10,10 @@ class LoginApi extends Api {
   LoginApi(this._securityService);
 
   @override
-  Handler getHandler({List<Middleware>? middleware}) {
+  Handler getHandler({
+    List<Middleware>? middleware,
+    bool isSecurity = false,
+  }) {
     Router router = Router();
 
     router.post('/login', (Request req) async {
